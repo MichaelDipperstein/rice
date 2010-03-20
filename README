@@ -1,0 +1,72 @@
+DESCRIPTION
+-----------
+This archive contains a simple and readable ANSI C implementation of
+Rice coding (Golomb-Rice coding) and decoding.  This implementation is not
+intended to be the best, fastest, smallest, or any other performance related
+adjective.
+
+More information on rice encoding may be found at:
+http://michael.dipperstein.com/rice
+http://en.wikipedia.org/wiki/Golomb_coding
+
+FILES
+-----
+bitfile.c       - Library to allow bitwise reading and writing of files.
+bitfile.h       - Header for bitfile library.
+COPYING         - Rules for copying and distributing GPL software
+COPYING.LESSER  - Rules for copying and distributing LGPL software
+rice.c          - Source for library rice encoding and decoding routines.
+rice.h          - Header containing prototypes for rice library functions.
+Makefile        - makefile for this project (assumes gcc compiler and GNU make)
+optlist.c       - Source code for GetOptlist function and supporting functions
+optlist.h       - Header file to be included by code using the optlist library
+README          - this file
+sample.c        - Demonstration of how to use the rice library functions
+
+BUILDING
+--------
+To build these files with GNU make and gcc, simply enter "make" from the
+command line.  The executable will be named sample (or sample.exe).
+
+USAGE
+-----
+Usage: sample <options>
+
+options:
+  -c : Encode input file to output file.
+  -d : Decode input file to output file.
+  -k [1-7] : Length of binary portion.
+  -i <filename> : Name of input file.
+  -o <filename> : Name of output file.
+  -h|?  : Print out command line options.
+
+-c      Compress the specified input file (see -i) using the Lempel-Ziv-Welch
+        encoding algorithm.  Results are written to the specified output file
+        (see -o).
+
+-d      Decompress the specified input file (see -i) using the Lempel-Ziv-Welch
+        decoding algorithm.  Results are written to the specified output file
+        (see -o).  Only files compressed by this program may be decompressed.
+
+-k [1-7]        The number of bits in the binary portion of a Rice encoded
+                value.
+
+-i <filename>   The name of the input file.  There is no valid usage of this
+                program without a specified input file.
+
+-o <filename>   The name of the output file.  If no file is specified, stdout
+                will be used.  NOTE: Sending compressed output to stdout may
+                produce undesirable results.
+
+HISTORY
+-------
+01/23/08  - Initial Release
+
+TODO
+----
+- Allow unenoded data sizes other than 8 bits.
+
+AUTHOR
+------
+Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+http://michael.dipperstein.com
