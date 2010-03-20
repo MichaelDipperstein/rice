@@ -2,16 +2,19 @@
 *                     Rice Encoding/Decoding Functions
 *
 *   File    : rice.c
-*   Purpose : Provide a functions for Rice encoding and decoding of file
+*   Purpose : Provide functions for Rice encoding and decoding of file
 *             streams.
 *   Author  : Michael Dipperstein
-*   Date    : January 23, 2008S
+*   Date    : January 23, 2008
 *
 ****************************************************************************
 *   UPDATES
 *
-*   $Id: rice.c,v 1.2 2008/01/25 07:26:13 michael Exp $
+*   $Id: rice.c,v 1.3 2008/12/22 15:11:27 michael Exp $
 *   $Log: rice.c,v $
+*   Revision 1.3  2008/12/22 15:11:27  michael
+*   Correct minor typos.
+*
 *   Revision 1.2  2008/01/25 07:26:13  michael
 *   Added CVS log.
 *

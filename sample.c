@@ -9,7 +9,11 @@
 ****************************************************************************
 *   UPDATES
 *
-*   $Id: sample.c,v 1.1.1.1 2008/01/25 07:07:14 michael Exp $
+*   $Id: sample.c,v 1.2 2009/04/17 04:28:00 michael Exp $
+*   $Log: sample.c,v $
+*   Revision 1.2  2009/04/17 04:28:00  michael
+*   Added log
+*
 ****************************************************************************
 *
 * SAMPLE: Sample usage of Rice Encoding Library

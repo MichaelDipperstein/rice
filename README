@@ -15,7 +15,7 @@ bitfile.c       - Library to allow bitwise reading and writing of files.
 bitfile.h       - Header for bitfile library.
 COPYING         - Rules for copying and distributing GPL software
 COPYING.LESSER  - Rules for copying and distributing LGPL software
-rice.c          - Source for library rice encoding and decoding routines.
+rice.c          - Source for rice library encoding and decoding routines.
 rice.h          - Header containing prototypes for rice library functions.
 Makefile        - makefile for this project (assumes gcc compiler and GNU make)
 optlist.c       - Source code for GetOptlist function and supporting functions
@@ -40,11 +40,11 @@ options:
   -o <filename> : Name of output file.
   -h|?  : Print out command line options.
 
--c      Compress the specified input file (see -i) using the Lempel-Ziv-Welch
+-c      Compress the specified input file (see -i) using the Golomb-Rice
         encoding algorithm.  Results are written to the specified output file
         (see -o).
 
--d      Decompress the specified input file (see -i) using the Lempel-Ziv-Welch
+-d      Decompress the specified input file (see -i) using the Golomb-Rice
         decoding algorithm.  Results are written to the specified output file
         (see -o).  Only files compressed by this program may be decompressed.
 
