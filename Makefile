@@ -9,7 +9,7 @@
 ############################################################################
 CC = gcc
 LD = gcc
-CFLAGS = -O3 -Wall -pedantic -ansi -c
+CFLAGS = -O3 -Wall -Wextra -Werror -pedantic -ansi -c
 LDFLAGS = -O3 -o
 
 # libraries
@@ -31,7 +31,7 @@ endif
 all:        sample$(EXE)
 
 sample$(EXE):   sample.o librice.a liboptlist.a
-	$(LD) $^ $(LIBS) $(LDFLAGS) $@
+	$(LD) $< $(LIBS) $(LDFLAGS) $@
 
 sample.o:   sample.c rice.h optlist.h
 	$(CC) $(CFLAGS) $<
