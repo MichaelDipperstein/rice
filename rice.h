@@ -43,21 +43,14 @@
 /***************************************************************************
 *                                CONSTANTS
 ***************************************************************************/
-#ifndef FALSE
-#define FALSE       0
-#endif
-
-#ifndef TRUE
-#define TRUE        1
-#endif
 
 /***************************************************************************
 *                               PROTOTYPES
 ***************************************************************************/
  /* encode inFile */
-int RiceEncodeFile(char *inFile, char *outFile, unsigned char k);
+int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k);
 
 /* decode inFile*/
-int RiceDecodeFile(char *inFile, char *outFile, unsigned char k);
+int RiceDecodeFile(FILE *inFile, FILE *outFile, unsigned char k);
 
 #endif  /* ndef _RICE_H_ */

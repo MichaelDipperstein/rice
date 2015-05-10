@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "optlist.h"
 #include "rice.h"
 
@@ -64,18 +65,20 @@ void ShowUsage(char *progName);
 *   Parameters : argc - number of parameters
 *                argv - parameter list
 *   Effects    : Encodes/Decodes input file
-*   Returned   : EXIT_SUCCESS for success, otherwise EXIT_FAILURE.
+*   Returned   : 0 for success, errno for failure.
 ****************************************************************************/
 int main(int argc, char *argv[])
 {
-    char *inFile, *outFile;
+    FILE *inFile;
+    FILE *outFile;
     char encode;                    /* encode/decode */
     unsigned char k;
-    option_t *optList, *thisOpt;
+    option_t *optList;
+    option_t *thisOpt;
 
     /* initialize variables */
     k = 0;
-    encode = TRUE;
+    encode = 1;
     inFile = NULL;
     outFile = NULL;
 
@@ -88,11 +91,11 @@ int main(int argc, char *argv[])
         switch(thisOpt->option)
         {
             case 'c':       /* compression mode */
-                encode = TRUE;
+                encode = 1;
                 break;
 
             case 'd':       /* decompression mode */
-                encode = FALSE;
+                encode = 0;
                 break;
 
             case 'k':       /* length of binary portion */
@@ -103,69 +106,63 @@ int main(int argc, char *argv[])
                 if (inFile != NULL)
                 {
                     fprintf(stderr, "Multiple input files not allowed.\n");
-                    free(inFile);
+                    fclose(inFile);
 
                     if (outFile != NULL)
                     {
-                        free(outFile);
+                        fclose(outFile);
                     }
 
                     FreeOptList(optList);
-                    return EXIT_FAILURE;
+                    return EINVAL;
                 }
-                else if ((inFile =
-                    (char *)malloc(strlen(thisOpt->argument) + 1)) == NULL)
+                else if ((inFile = fopen(thisOpt->argument, "rb")) == NULL)
                 {
-                    perror("Memory allocation");
+                    perror("Opening Input File");
 
                     if (outFile != NULL)
                     {
-                        free(outFile);
+                        fclose(outFile);
                     }
 
                     FreeOptList(optList);
-                    return EXIT_FAILURE;
+                    return errno;
                 }
-
-                strcpy(inFile, thisOpt->argument);
                 break;
 
             case 'o':       /* output file name */
                 if (outFile != NULL)
                 {
                     fprintf(stderr, "Multiple output files not allowed.\n");
-                    free(outFile);
+                    fclose(outFile);
 
                     if (inFile != NULL)
                     {
-                        free(inFile);
+                        fclose(inFile);
                     }
 
                     FreeOptList(optList);
-                    return EXIT_FAILURE;
+                    return EINVAL;
                 }
-                else if ((outFile =
-                    (char *)malloc(strlen(thisOpt->argument) + 1)) == NULL)
+                else if ((outFile = fopen(thisOpt->argument, "wb")) == NULL)
                 {
-                    perror("Memory allocation");
+                    perror("Opening Output File");
 
                     if (inFile != NULL)
                     {
-                        free(inFile);
+                        fclose(inFile);
                     }
 
                     FreeOptList(optList);
-                    return EXIT_FAILURE;
+                    return errno;
                 }
-
-                strcpy(outFile, thisOpt->argument);
                 break;
 
             case 'h':
             case '?':
-                ShowUsage(RemovePath(argv[0]));
+                ShowUsage(argv[0]);
                 FreeOptList(optList);
-                return EXIT_SUCCESS;
+                return 0;
         }
 
         optList = thisOpt->next;
@@ -177,7 +174,7 @@ int main(int argc, char *argv[])
     if (k < 1 || k > 7)
     {
         fprintf(stderr, "Error: k must be between 1 and 7.\n");
-        ShowUsage(RemovePath(argv[0]));
+        ShowUsage(argv[0]);
 
         if (inFile != NULL)
         {
@@ -196,7 +193,7 @@ int main(int argc, char *argv[])
     if (inFile == NULL)
     {
         fprintf(stderr, "Input file must be provided\n");
-        fprintf(stderr, "Enter \"%s -?\" for help.\n", RemovePath(argv[0]));
+        ShowUsage(argv[0]);
 
         if (outFile != NULL)
         {
@@ -208,7 +205,7 @@ int main(int argc, char *argv[])
     else if (outFile == NULL)
     {
         fprintf(stderr, "Output file must be provided\n");
-        fprintf(stderr, "Enter \"%s -?\" for help.\n", RemovePath(argv[0]));
+        ShowUsage(argv[0]);
 
         if (inFile != NULL)
         {
@@ -228,42 +225,9 @@ int main(int argc, char *argv[])
         RiceDecodeFile(inFile, outFile, k);
     }
 
-    free(inFile);
-    free(outFile);
-    return EXIT_SUCCESS;
-}
-
-/****************************************************************************
-*   Function   : RemovePath
-*   Description: This is function accepts a pointer to the name of a file
-*                along with path information and returns a pointer to the
-*                character that is not part of the path.
-*   Parameters : fullPath - pointer to an array of characters containing
-*                           a file name and possible path modifiers.
-*   Effects    : None
-*   Returned   : Returns a pointer to the first character after any path
-*                information.
-****************************************************************************/
-char *RemovePath(char *fullPath)
-{
-    int i;
-    char *start, *tmp;                          /* start of file name */
-    const char delim[3] = {'\\', '/', ':'};     /* path deliminators */
-
-    start = fullPath;
-
-    /* find the first character after all file path delimiters */
-    for (i = 0; i < 3; i++)
-    {
-        tmp = strrchr(start, delim[i]);
-
-        if (tmp != NULL)
-        {
-            start = tmp + 1;
-        }
-    }
-
-    return start;
+    fclose(inFile);
+    fclose(outFile);
+    return 0;
 }
 
 /****************************************************************************
@@ -277,7 +241,7 @@ char *RemovePath(char *fullPath)
 ****************************************************************************/
 void ShowUsage(char *progName)
 {
-    printf("Usage: %s <options>\n\n", progName);
+    printf("Usage: %s <options>\n\n", FindFileName(progName));
     printf("Options:\n");
     printf("  -c : Encode input file to output file.\n");
     printf("  -d : Decode input file to output file.\n");

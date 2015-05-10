@@ -47,6 +47,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <errno.h>
 #include "rice.h"
 #include "bitfile.h"
 
@@ -83,41 +84,36 @@
 *                k - length of binary portion of encoded word
 *   Effects    : File is encoded using the Rice algorithm with a k bit
 *                binary portion.
-*   Returned   : TRUE for success, otherwise FALSE.
+*   Returned   : 0 for success, -1 for failure.  errno will be set in the
+*                event of a failure.  Either way, inFile and outFile will
+*                be left open.
 ***************************************************************************/
-int RiceEncodeFile(char *inFile, char *outFile, unsigned char k)
+int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k)
 {
-    FILE *fpIn;                         /* uncoded input */
-    bit_file_t *bfpOut;                 /* encoded output */
+    bit_file_t *bOutFile;               /* encoded output */
     unsigned char unary, binary;        /* unary & binary portions */
     unsigned char mask;                 /* mask for binary portion */
     int c;
 
-    /* open input and output files */
-    if (NULL == (fpIn = fopen(inFile, "rb")))
+    /* validate input and output files */
+    if ((NULL == inFile) || (NULL == outFile))
     {
-        perror(inFile);
-        return FALSE;
+        errno = ENOENT;
+        return -1;
     }
 
-    if (NULL == outFile)
+    bOutFile = MakeBitFile(outFile, BF_WRITE);
+
+    if (NULL == bOutFile)
     {
-        bfpOut = MakeBitFile(stdout, BF_WRITE);
-    }
-    else
-    {
-        if (NULL == (bfpOut = BitFileOpen(outFile, BF_WRITE)))
-        {
-            fclose(fpIn);
-            perror(outFile);
-            return FALSE;
-        }
+        perror("Making Output File a BitFile");
+        return -1;
     }
 
     mask =  0xFF >> (CHAR_BIT - k);
 
     /* encode input file one byte at a time */
-    while ((c = fgetc(fpIn)) != EOF)
+    while ((c = fgetc(inFile)) != EOF)
     {
         /* compute the unary portion */
         unary = (unsigned char)c;
@@ -127,24 +123,21 @@ int RiceEncodeFile(char *inFile, char *outFile, unsigned char k)
         {
             /* write out unary worth of 1s */
             unary--;
-            BitFilePutBit(1, bfpOut);
+            BitFilePutBit(1, bOutFile);
         }
 
         /* write an ending 0 */
-        BitFilePutBit(0, bfpOut);
+        BitFilePutBit(0, bOutFile);
 
         /* binary portion */
         binary = (unsigned char)c & mask;
         binary <<= (CHAR_BIT - k);      /* right justify bits */
-        BitFilePutBits(bfpOut, &binary, k);
+        BitFilePutBits(bOutFile, &binary, k);
     }
 
     /* pad fill with 1s so decode will run into EOF */
-    BitFileFlushOutput(bfpOut, TRUE);
-
-    fclose(fpIn);
-    BitFileClose(bfpOut);
-    return TRUE;
+    BitFileFlushOutput(bOutFile, 1);
+    return 0;
 }
 
 /***************************************************************************
@@ -156,40 +149,36 @@ int RiceEncodeFile(char *inFile, char *outFile, unsigned char k)
 *                k - length of binary portion of encoded word
 *   Effects    : File is decoded using the Rice algorithm for codes with a
 *                k bit binary portion.
-*   Returned   : TRUE for success, otherwise FALSE.
+*   Returned   : 0 for success, -1 for failure.  errno will be set in the
+*                event of a failure.  Either way, inFile and outFile will
+*                be left open.
 ***************************************************************************/
-int RiceDecodeFile(char *inFile, char *outFile, unsigned char k)
+int RiceDecodeFile(FILE *inFile, FILE *outFile, unsigned char k)
 {
-    bit_file_t *bfpIn;                  /* encoded input */
-    FILE *fpOut;                        /* decoded output */
+    bit_file_t *bInFile;                /* encoded input */
     int bit;
-    unsigned char tmp, byte;
+    unsigned char tmp;
+    unsigned char byte;
 
-    /* open input and output files */
-    if (NULL == (bfpIn = BitFileOpen(inFile, BF_READ)))
+    /* validate input and output files */
+    if ((NULL == inFile) || (NULL == outFile))
     {
-        perror(inFile);
-        return FALSE;
+        errno = ENOENT;
+        return -1;
     }
 
-    if (NULL == outFile)
+    bInFile = MakeBitFile(inFile, BF_READ);
+
+    if (NULL == bInFile)
     {
-        fpOut = stdout;
-    }
-    else
-    {
-        if (NULL == (fpOut = fopen(outFile, "wb")))
-        {
-            BitFileClose(bfpIn);
-            perror(outFile);
-            return FALSE;
-        }
+        perror("Making Input File a BitFile");
+        return -1;
     }
 
     byte = 0;
 
     /* decode input file */
-    while ((bit = BitFileGetBit(bfpIn)) != EOF)
+    while ((bit = BitFileGetBit(bInFile)) != EOF)
     {
         if (1 == bit)
         {
@@ -200,21 +189,19 @@ int RiceDecodeFile(char *inFile, char *outFile, unsigned char k)
             /* finished unary portion */
             tmp = byte << k;
 
-            if (EOF == BitFileGetBits(bfpIn, &byte, k))
+            if (EOF == BitFileGetBits(bInFile, &byte, k))
             {
                 /* unary was actually spare bits */
                 break;
             }
 
-            byte >>= (CHAR_BIT - k);        /* leftt justify bits */
+            byte >>= (CHAR_BIT - k);        /* left justify bits */
             byte |= tmp;
-            fputc(byte, fpOut);
+            fputc(byte, outFile);
 
             byte = 0;
         }
     }
 
-    fclose(fpOut);
-    BitFileClose(bfpIn);
-    return TRUE;
+    return 0;
 }
