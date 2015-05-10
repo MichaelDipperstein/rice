@@ -79,8 +79,8 @@
 *   Function   : RiceEncodeFile
 *   Description: This routine reads an input file 1 character at a time and
 *                writes out a Rice encoded version of that file.
-*   Parameters : inFile - Name of file to encode
-*                outFile - Name of file to write encoded output to
+*   Parameters : inFile - pointer to open file to encode
+*                outFile - pointer to open file receiving encoded output
 *                k - length of binary portion of encoded word
 *   Effects    : File is encoded using the Rice algorithm with a k bit
 *                binary portion.
@@ -91,7 +91,8 @@
 int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k)
 {
     bit_file_t *bOutFile;               /* encoded output */
-    unsigned char unary, binary;        /* unary & binary portions */
+    unsigned char unary;                /* unary portion */
+    unsigned char binary;               /* binary portion */
     unsigned char mask;                 /* mask for binary portion */
     int c;
 
@@ -144,8 +145,8 @@ int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k)
 *   Function   : RiceDecodeFile
 *   Description: This routine reads a rice encoded input file and writes
 *                the decoded output one byte at a time.
-*   Parameters : inFile - Name of file to decode
-*                outFile - Name of file to write decoded output to
+*   Parameters : inFile - pointer to open file to decode
+*                outFile - pointer to open file receiving decoded output
 *                k - length of binary portion of encoded word
 *   Effects    : File is decoded using the Rice algorithm for codes with a
 *                k bit binary portion.
