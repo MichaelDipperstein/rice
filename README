@@ -61,6 +61,12 @@ options:
 HISTORY
 -------
 01/23/08  - Initial Release
+05/22/15  - Changed the API so that encode and decode routines accept opened
+            file streams instead of file names.
+          - Changed return value to 0 for success and -1 for failure with
+            reason in errno.
+          - Upgraded to latest oplist and bitfile libraries.
+          - Tighter adherence to Michael Barr's "Top 10 Bug-Killing Coding
 
 TODO
 ----

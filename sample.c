@@ -7,17 +7,10 @@
 *   Date    : January 23, 2008
 *
 ****************************************************************************
-*   UPDATES
-*
-*   $Id: sample.c,v 1.2 2009/04/17 04:28:00 michael Exp $
-*   $Log: sample.c,v $
-*   Revision 1.2  2009/04/17 04:28:00  michael
-*   Added log
-*
-****************************************************************************
 *
 * SAMPLE: Sample usage of Rice Encoding Library
-* Copyright (C) 2008 by Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+* Copyright (C) 2008 - 2015 by
+* Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
 *
 * This file is part of the rice library.
 *
@@ -49,8 +42,7 @@
 /***************************************************************************
 *                               PROTOTYPES
 ***************************************************************************/
-char *RemovePath(char *fullPath);
-void ShowUsage(char *progName);
+void ShowUsage(const char *progName);
 
 /***************************************************************************
 *                                FUNCTIONS
@@ -239,7 +231,7 @@ int main(int argc, char *argv[])
 *   Effects    : Usage instructions are sent to stdout.
 *   Returned   : None
 ****************************************************************************/
-void ShowUsage(char *progName)
+void ShowUsage(const char *progName)
 {
     printf("Usage: %s <options>\n\n", FindFileName(progName));
     printf("Options:\n");

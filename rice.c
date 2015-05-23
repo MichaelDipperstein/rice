@@ -8,20 +8,10 @@
 *   Date    : January 23, 2008
 *
 ****************************************************************************
-*   UPDATES
-*
-*   $Id: rice.c,v 1.3 2008/12/22 15:11:27 michael Exp $
-*   $Log: rice.c,v $
-*   Revision 1.3  2008/12/22 15:11:27  michael
-*   Correct minor typos.
-*
-*   Revision 1.2  2008/01/25 07:26:13  michael
-*   Added CVS log.
-*
-****************************************************************************
 *
 * Rice: ANSI C Rice Encoding/Decoding Routines
-* Copyright (C) 2008 by Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+* Copyright (C) 2008 - 2015 by
+* Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
 *
 * This file is part of the rice library.
 *
@@ -88,7 +78,7 @@
 *                event of a failure.  Either way, inFile and outFile will
 *                be left open.
 ***************************************************************************/
-int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k)
+int RiceEncodeFile(FILE *inFile, FILE *outFile, const unsigned char k)
 {
     bit_file_t *bOutFile;               /* encoded output */
     unsigned char unary;                /* unary portion */
@@ -154,7 +144,7 @@ int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k)
 *                event of a failure.  Either way, inFile and outFile will
 *                be left open.
 ***************************************************************************/
-int RiceDecodeFile(FILE *inFile, FILE *outFile, unsigned char k)
+int RiceDecodeFile(FILE *inFile, FILE *outFile, const unsigned char k)
 {
     bit_file_t *bInFile;                /* encoded input */
     int bit;

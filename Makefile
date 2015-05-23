@@ -1,10 +1,6 @@
 ############################################################################
-# Makefile for rice encode/decode library and sample program
 #
-# $Id: Makefile,v 1.3 2008/01/25 07:27:48 michael Exp $
-# $Log: Makefile,v $
-# Revision 1.3  2008/01/25 07:27:48  michael
-# Added CVS log.
+# Makefile for rice encode/decode library and sample program
 #
 ############################################################################
 CC = gcc

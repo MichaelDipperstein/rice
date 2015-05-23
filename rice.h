@@ -8,17 +8,10 @@
 *   Date    : January 23, 2008
 *
 ****************************************************************************
-*   UPDATES
-*
-*   $Id: rice.h,v 1.2 2008/01/25 07:27:48 michael Exp $
-*   $Log: rice.h,v $
-*   Revision 1.2  2008/01/25 07:27:48  michael
-*   Added CVS log.
-*
-****************************************************************************
 *
 * Rice: ANSI C Rice Encoding/Decoding Routines
-* Copyright (C) 2008 by Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+* Copyright (C) 2008 - 2015 by
+* Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
 *
 * This file is part of the rice library.
 *
@@ -48,9 +41,9 @@
 *                               PROTOTYPES
 ***************************************************************************/
  /* encode inFile */
-int RiceEncodeFile(FILE *inFile, FILE *outFile, unsigned char k);
+int RiceEncodeFile(FILE *inFile, FILE *outFile, const unsigned char k);
 
 /* decode inFile*/
-int RiceDecodeFile(FILE *inFile, FILE *outFile, unsigned char k);
+int RiceDecodeFile(FILE *inFile, FILE *outFile, const unsigned char k);
 
 #endif  /* ndef _RICE_H_ */
