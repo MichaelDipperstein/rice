@@ -58,6 +58,36 @@ options:
                 will be used.  NOTE: Sending compressed output to stdout may
                 produce undesirable results.
 
+LIBRARY API
+-----------
+Encoding Data:
+int RiceEncodeFile(FILE *inFile, FILE *outFile, const unsigned char k)
+inFile
+    The file stream to be encoded.  It must opened.  NULL pointers will return
+    an error.
+outFile
+    The file stream receiving the encoded results.  It must be opened.  NULL
+    pointers will return an error.
+k
+    The length of binary portion of encoded word
+Return Value
+    Zero for success, -1 for failure.  Error type is contained in errno.  Files
+    will remain open.
+
+Decoding Data:
+int RiceDecodeFile(FILE *inFile, FILE *outFile, const unsigned char k)
+inFile
+    The file stream to be decoded.  It must be opened.  NULL pointers will
+    return an error.
+outFile
+    The file stream receiving the decoded results.  It must be opened.  NULL
+    pointers will return an error.
+k
+    The length of binary portion of encoded word
+Return Value
+    Zero for success, -1 for failure.  Error type is contained in errno.  Files
+    will remain open.
+
 HISTORY
 -------
 01/23/08  - Initial Release
