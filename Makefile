@@ -9,7 +9,7 @@ CFLAGS = -O3 -Wall -Wextra -Werror -pedantic -ansi -c
 LDFLAGS = -O3 -o
 
 # libraries
-LIBS = -L. -lrice -loptlist
+LIBS = -L. -Lbitfile -Loptlist -lrice -loptlist -lbitfile
 
 # Treat NT and non-NT windows the same
 ifeq ($(OS),Windows_NT)
@@ -26,30 +26,28 @@ endif
 
 all:        sample$(EXE)
 
-sample$(EXE):   sample.o librice.a liboptlist.a
+sample$(EXE):   sample.o librice.a bitfile/libbitfile.a optlist/liboptlist.a
 	$(LD) $< $(LIBS) $(LDFLAGS) $@
 
-sample.o:   sample.c rice.h optlist.h
+sample.o:   sample.c rice.h optlist/optlist.h
 	$(CC) $(CFLAGS) $<
 
-librice.a:  rice.o bitfile.o
-	ar crv librice.a rice.o bitfile.o
+librice.a:  rice.o
+	ar crv librice.a rice.o
 	ranlib librice.a
 
-rice.o: rice.c rice.h bitfile.h
+rice.o: rice.c rice.h bitfile/bitfile.h
 	$(CC) $(CFLAGS) $<
 
-bitfile.o:  bitfile.c bitfile.h
-	$(CC) $(CFLAGS) $<
+bitfile/libbitfile.a:
+	cd bitfile && $(MAKE) libbitfile.a
 
-liboptlist.a:   optlist.o
-	ar crv liboptlist.a optlist.o
-	ranlib liboptlist.a
-
-optlist.o:  optlist.c optlist.h
-	$(CC) $(CFLAGS) $<
+optlist/liboptlist.a:
+	cd optlist && $(MAKE) liboptlist.a
 
 clean:
 	$(DEL) *.o
 	$(DEL) *.a
 	$(DEL) sample$(EXE)
+	cd optlist && $(MAKE) clean
+	cd bitfile && $(MAKE) clean

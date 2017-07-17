@@ -9,7 +9,7 @@
 ****************************************************************************
 *
 * SAMPLE: Sample usage of Rice Encoding Library
-* Copyright (C) 2008 - 2015 by
+* Copyright (C) 2008 - 2015, 2017 by
 * Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
 *
 * This file is part of the rice library.
@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "optlist.h"
+#include "optlist/optlist.h"
 #include "rice.h"
 
 /***************************************************************************

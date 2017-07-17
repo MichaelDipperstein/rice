@@ -39,7 +39,7 @@
 #include <limits.h>
 #include <errno.h>
 #include "rice.h"
-#include "bitfile.h"
+#include "bitfile/bitfile.h"
 
 /***************************************************************************
 *                            TYPE DEFINITIONS

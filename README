@@ -11,17 +11,15 @@ http://en.wikipedia.org/wiki/Golomb_coding
 
 FILES
 -----
-bitfile.c       - Library to allow bitwise reading and writing of files.
-bitfile.h       - Header for bitfile library.
 COPYING         - Rules for copying and distributing GPL software
 COPYING.LESSER  - Rules for copying and distributing LGPL software
 rice.c          - Source for rice library encoding and decoding routines.
 rice.h          - Header containing prototypes for rice library functions.
 Makefile        - makefile for this project (assumes gcc compiler and GNU make)
-optlist.c       - Source code for GetOptlist function and supporting functions
-optlist.h       - Header file to be included by code using the optlist library
 README          - this file
 sample.c        - Demonstration of how to use the rice library functions
+optlist/        - Subtree containing optlist command line option parser library
+bitfile/        - Subtree containing bitfile bitwise file library
 
 BUILDING
 --------
@@ -97,6 +95,7 @@ HISTORY
             reason in errno.
           - Upgraded to latest oplist and bitfile libraries.
           - Tighter adherence to Michael Barr's "Top 10 Bug-Killing Coding
+07/16/17  - Changes for cleaner use with GitHub
 
 TODO
 ----
