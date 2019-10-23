@@ -11,7 +11,7 @@
 *
 * Rice: ANSI C Rice Encoding/Decoding Routines
 * Copyright (C) 2008 - 2015 by
-* Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+* Michael Dipperstein (mdipperstein@gmail.com)
 *
 * This file is part of the rice library.
 *

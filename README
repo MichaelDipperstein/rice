@@ -26,6 +26,11 @@ BUILDING
 To build these files with GNU make and gcc, simply enter "make" from the
 command line.  The executable will be named sample (or sample.exe).
 
+GIT NOTE: Updates to subtrees optlist and bitfile don't get pulled by "git pull"
+Use the following commands to pull their updates:
+git subtree pull --prefix optlist https://github.com/MichaelDipperstein/optlist.git master --squash
+git subtree pull --prefix bitfile https://github.com/MichaelDipperstein/bitfile.git master --squash
+
 USAGE
 -----
 Usage: sample <options>
@@ -103,5 +108,5 @@ TODO
 
 AUTHOR
 ------
-Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+Michael Dipperstein (mdipper@gmail.com)
 https://michaeldipperstein.github.io/index.html

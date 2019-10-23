@@ -10,7 +10,7 @@
 *
 * SAMPLE: Sample usage of Rice Encoding Library
 * Copyright (C) 2008 - 2015, 2017 by
-* Michael Dipperstein (mdipper@alumni.engr.ucsb.edu)
+* Michael Dipperstein (mdipperstein@gmail.com)
 *
 * This file is part of the rice library.
 *
